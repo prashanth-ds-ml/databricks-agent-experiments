@@ -1,0 +1,21 @@
+customer_id,first_name,last_name,email,phone,city,state,signup_date,is_active
+1,Theo,Brandt,theo.brandt@example.com,215-555-0142,Philadelphia,PA,2023-02-14,true
+2,Nadia,Reyes,nadia.reyes@example.com,,Pittsburgh,PA,2023-05-03,true
+3,Owen,Castellano,owen.c@example.com,267-555-0199,Allentown,PA,2024-01-20,true
+4,Mia,Thompson,mia.t@example.com,415-555-0110,San Francisco,CA,2022-11-30,true
+5,Liam,Walsh,liam.walsh@example.com,,Columbus,OH,2023-08-17,false
+6,Ava,Nguyen,ava.nguyen@example.com,503-555-0188,Portland,OR,2024-03-11,true
+7,Noah,Patel,noah.patel@example.com,305-555-0123,Miami,FL,2023-06-25,true
+8,Emma,Brandt,emma.brandt@example.com,215-555-0177,Philadelphia,PA,2024-02-02,false
+9,Lucas,Romano,lucas.r@example.com,,Cleveland,OH,2022-09-09,true
+10,Sofia,Greer,sofia.greer@example.com,415-555-0166,Oakland,CA,2023-12-19,true
+11,Ethan,Kim,ethan.kim@example.com,206-555-0144,Seattle,WA,2024-04-05,true
+12,Isabella,Ford,isabella.ford@example.com,,Austin,TX,2023-03-28,true
+13,Mason,Doyle,mason.doyle@example.com,412-555-0133,Pittsburgh,PA,2024-05-15,true
+14,Chloe,Bauer,chloe.bauer@example.com,503-555-0121,Eugene,OR,2022-07-22,false
+15,Logan,Pierce,logan.pierce@example.com,305-555-0150,Orlando,FL,2023-10-30,true
+16,Harper,Quinn,harper.quinn@example.com,,Sacramento,CA,2024-06-01,true
+17,Jack,Mercer,jack.mercer@example.com,614-555-0109,Columbus,OH,2023-01-12,true
+18,Lily,Castellano,lily.c@example.com,267-555-0102,Allentown,PA,2024-03-19,true
+19,Daniel,Foss,daniel.foss@example.com,206-555-0175,Tacoma,WA,2022-12-05,false
+20,Grace,Holt,grace.holt@example.com,512-555-0190,Austin,TX,2024-04-28,true

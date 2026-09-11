@@ -1,0 +1,34 @@
+{
+  "table": "workspace.candy_distributor.candy_targets",
+  "row_count": 3,
+  "column_count": 2,
+  "inferred_primary_key": "division",
+  "columns": {
+    "division": {
+      "data_type": "STRING",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 3,
+      "kind": "categorical",
+      "value_counts": {
+        "Chocolate": 1,
+        "Sugar": 1,
+        "Other": 1
+      },
+      "high_cardinality": false,
+      "is_inferred_primary_key": true
+    },
+    "target": {
+      "data_type": "INT",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 3,
+      "kind": "numerical",
+      "min": 3000.0,
+      "max": 27000.0,
+      "mean": 15000.0,
+      "median": 15000.0,
+      "stddev": 12000.0
+    }
+  }
+}

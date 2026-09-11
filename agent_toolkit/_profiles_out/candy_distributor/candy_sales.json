@@ -1,0 +1,228 @@
+{
+  "table": "workspace.candy_distributor.candy_sales",
+  "row_count": 10194,
+  "column_count": 18,
+  "inferred_primary_key": "row_id",
+  "columns": {
+    "row_id": {
+      "data_type": "INT",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 10194,
+      "kind": "numerical",
+      "min": 1.0,
+      "max": 10194.0,
+      "mean": 5097.5,
+      "median": 5096.0,
+      "stddev": 2942.8987,
+      "is_inferred_primary_key": true
+    },
+    "order_id": {
+      "data_type": "STRING",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 8549,
+      "kind": "categorical",
+      "high_cardinality": true,
+      "note": "8549 unique values across 10194 rows; too high-cardinality to list (likely an identifier/free-text column)"
+    },
+    "order_date": {
+      "data_type": "DATE",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 1242,
+      "kind": "temporal",
+      "min": "2021-01-03",
+      "max": "2024-12-30"
+    },
+    "ship_date": {
+      "data_type": "DATE",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 1338,
+      "kind": "temporal",
+      "min": "2026-06-30",
+      "max": "2030-06-28"
+    },
+    "ship_mode": {
+      "data_type": "STRING",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 4,
+      "kind": "categorical",
+      "value_counts": {
+        "Standard Class": 6120,
+        "Second Class": 1979,
+        "First Class": 1548,
+        "Same Day": 547
+      },
+      "high_cardinality": false
+    },
+    "customer_id": {
+      "data_type": "INT",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 5044,
+      "kind": "numerical",
+      "min": 100006.0,
+      "max": 192314.0,
+      "mean": 134468.9612,
+      "median": 133543.0,
+      "stddev": 20231.483
+    },
+    "country_region": {
+      "data_type": "STRING",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 2,
+      "kind": "categorical",
+      "value_counts": {
+        "United States": 9994,
+        "Canada": 200
+      },
+      "high_cardinality": false
+    },
+    "city": {
+      "data_type": "STRING",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 542,
+      "kind": "categorical",
+      "high_cardinality": true,
+      "note": "542 unique values across 10194 rows; too high-cardinality to list (likely an identifier/free-text column)"
+    },
+    "state_province": {
+      "data_type": "STRING",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 59,
+      "kind": "categorical",
+      "high_cardinality": true,
+      "note": "59 unique values across 10194 rows; too high-cardinality to list (likely an identifier/free-text column)"
+    },
+    "postal_code": {
+      "data_type": "STRING",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 654,
+      "kind": "categorical",
+      "high_cardinality": true,
+      "note": "654 unique values across 10194 rows; too high-cardinality to list (likely an identifier/free-text column)"
+    },
+    "division": {
+      "data_type": "STRING",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 3,
+      "kind": "categorical",
+      "value_counts": {
+        "Chocolate": 9844,
+        "Other": 310,
+        "Sugar": 40
+      },
+      "high_cardinality": false
+    },
+    "region": {
+      "data_type": "STRING",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 4,
+      "kind": "categorical",
+      "value_counts": {
+        "Pacific": 3253,
+        "Atlantic": 2986,
+        "Interior": 2335,
+        "Gulf": 1620
+      },
+      "high_cardinality": false
+    },
+    "product_id": {
+      "data_type": "STRING",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 15,
+      "kind": "categorical",
+      "value_counts": {
+        "CHO-MIL-31000": 2137,
+        "CHO-SCR-58000": 2064,
+        "CHO-TRI-54000": 2015,
+        "CHO-FUD-51000": 1818,
+        "CHO-NUT-13000": 1810,
+        "OTH-GUM-21000": 120,
+        "OTH-KAZ-38000": 96,
+        "OTH-LIC-15000": 94,
+        "SUG-SWE-91000": 10,
+        "SUG-LAF-25000": 10
+      },
+      "high_cardinality": false
+    },
+    "product_name": {
+      "data_type": "STRING",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 15,
+      "kind": "categorical",
+      "value_counts": {
+        "Wonka Bar - Milk Chocolate": 2137,
+        "Wonka Bar -Scrumdiddlyumptious": 2064,
+        "Wonka Bar - Triple Dazzle Caramel": 2015,
+        "Wonka Bar - Fudge Mallows": 1818,
+        "Wonka Bar - Nutty Crunch Surprise": 1810,
+        "Wonka Gum": 120,
+        "Kazookles": 96,
+        "Lickable Wallpaper": 94,
+        "SweeTARTS": 10,
+        "Laffy Taffy": 10
+      },
+      "high_cardinality": false
+    },
+    "sales": {
+      "data_type": "DOUBLE",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 88,
+      "kind": "numerical",
+      "min": 1.25,
+      "max": 260.0,
+      "mean": 13.9085,
+      "median": 10.8,
+      "stddev": 11.341
+    },
+    "units": {
+      "data_type": "INT",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 14,
+      "kind": "numerical",
+      "min": 1.0,
+      "max": 14.0,
+      "mean": 3.7918,
+      "median": 3.0,
+      "stddev": 2.2283
+    },
+    "gross_profit": {
+      "data_type": "DOUBLE",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 121,
+      "kind": "numerical",
+      "min": 0.25,
+      "max": 130.0,
+      "mean": 9.1665,
+      "median": 7.47,
+      "stddev": 6.6437
+    },
+    "cost": {
+      "data_type": "DOUBLE",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 95,
+      "kind": "numerical",
+      "min": 0.6,
+      "max": 130.0,
+      "mean": 4.7421,
+      "median": 3.6,
+      "stddev": 5.0616
+    }
+  }
+}

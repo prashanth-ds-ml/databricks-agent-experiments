@@ -1,0 +1,101 @@
+{
+  "table": "workspace.candy_distributor.candy_products",
+  "row_count": 15,
+  "column_count": 6,
+  "inferred_primary_key": "product_id",
+  "columns": {
+    "division": {
+      "data_type": "STRING",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 3,
+      "kind": "categorical",
+      "value_counts": {
+        "Sugar": 6,
+        "Chocolate": 5,
+        "Other": 4
+      },
+      "high_cardinality": false
+    },
+    "product_name": {
+      "data_type": "STRING",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 15,
+      "kind": "categorical",
+      "value_counts": {
+        "Fun Dip": 1,
+        "Laffy Taffy": 1,
+        "SweeTARTS": 1,
+        "Nerds": 1,
+        "Wonka Bar - Fudge Mallows": 1,
+        "Wonka Bar - Triple Dazzle Caramel": 1,
+        "Wonka Bar - Nutty Crunch Surprise": 1,
+        "Wonka Bar - Milk Chocolate": 1,
+        "Wonka Bar -Scrumdiddlyumptious": 1,
+        "Fizzy Lifting Drinks": 1
+      },
+      "high_cardinality": false
+    },
+    "factory": {
+      "data_type": "STRING",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 5,
+      "kind": "categorical",
+      "value_counts": {
+        "Sugar Shack": 5,
+        "Secret Factory": 3,
+        "Lot's O' Nuts": 3,
+        "Wicked Choccy's": 2,
+        "The Other Factory": 2
+      },
+      "high_cardinality": false
+    },
+    "product_id": {
+      "data_type": "STRING",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 15,
+      "kind": "categorical",
+      "value_counts": {
+        "SUG-FUN-75000": 1,
+        "SUG-LAF-25000": 1,
+        "SUG-SWE-91000": 1,
+        "SUG-NER-92000": 1,
+        "CHO-FUD-51000": 1,
+        "CHO-TRI-54000": 1,
+        "CHO-NUT-13000": 1,
+        "CHO-MIL-31000": 1,
+        "CHO-SCR-58000": 1,
+        "OTH-FIZ-56000": 1
+      },
+      "high_cardinality": false,
+      "is_inferred_primary_key": true
+    },
+    "unit_price": {
+      "data_type": "DOUBLE",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 10,
+      "kind": "numerical",
+      "min": 1.25,
+      "max": 20.0,
+      "mean": 4.462,
+      "median": 3.49,
+      "stddev": 4.7901
+    },
+    "unit_cost": {
+      "data_type": "DOUBLE",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 13,
+      "kind": "numerical",
+      "min": 0.6,
+      "max": 10.0,
+      "mean": 1.806,
+      "median": 1.1,
+      "stddev": 2.3449
+    }
+  }
+}

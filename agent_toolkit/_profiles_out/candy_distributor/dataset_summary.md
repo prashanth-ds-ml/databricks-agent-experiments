@@ -1,0 +1,3 @@
+# candy_distributor: what is this data?
+
+This data likely represents a candy distribution business, with tables tracking candy factories, products, sales, and targets. The `candy_sales` table appears to be the core table, containing information on individual sales transactions, while the `candy_factories` and `candy_products` tables provide additional context on the production and product offerings. Two things worth investigating are the relationship between sales and shipping modes, as well as the performance of different product divisions against their targets, as outlined in the `candy_targets` table.

@@ -1,0 +1,48 @@
+{
+  "table": "workspace.candy_distributor.candy_factories",
+  "row_count": 5,
+  "column_count": 3,
+  "inferred_primary_key": "factory",
+  "columns": {
+    "factory": {
+      "data_type": "STRING",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 5,
+      "kind": "categorical",
+      "value_counts": {
+        "Secret Factory": 1,
+        "Wicked Choccy's": 1,
+        "Lot's O' Nuts": 1,
+        "Sugar Shack": 1,
+        "The Other Factory": 1
+      },
+      "high_cardinality": false,
+      "is_inferred_primary_key": true
+    },
+    "latitude": {
+      "data_type": "DOUBLE",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 5,
+      "kind": "numerical",
+      "min": 32.076176,
+      "max": 48.11914,
+      "mean": 37.9282,
+      "median": 35.1175,
+      "stddev": 6.7795
+    },
+    "longitude": {
+      "data_type": "DOUBLE",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 5,
+      "kind": "numerical",
+      "min": -111.768036,
+      "max": -81.088371,
+      "mean": -93.9148,
+      "median": -90.565487,
+      "stddev": 11.3486
+    }
+  }
+}

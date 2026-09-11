@@ -1,0 +1,191 @@
+{
+  "table": "workspace.candy_distributor.uszips",
+  "row_count": 33787,
+  "column_count": 18,
+  "inferred_primary_key": "zip",
+  "columns": {
+    "zip": {
+      "data_type": "INT",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 33787,
+      "kind": "numerical",
+      "min": 601.0,
+      "max": 99929.0,
+      "mean": 49705.5282,
+      "median": 49721.0,
+      "stddev": 27559.0583,
+      "is_inferred_primary_key": true
+    },
+    "lat": {
+      "data_type": "DOUBLE",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 33412,
+      "kind": "numerical",
+      "min": -14.21984,
+      "max": 71.27434,
+      "mean": 38.8008,
+      "median": 39.47559,
+      "stddev": 5.3877
+    },
+    "lng": {
+      "data_type": "DOUBLE",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 33657,
+      "kind": "numerical",
+      "min": -176.62962,
+      "max": 145.75349,
+      "mean": -90.9565,
+      "median": -88.18441,
+      "stddev": 15.6664
+    },
+    "city": {
+      "data_type": "STRING",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 17747,
+      "kind": "categorical",
+      "high_cardinality": true,
+      "note": "17747 unique values across 33787 rows; too high-cardinality to list (likely an identifier/free-text column)"
+    },
+    "state_id": {
+      "data_type": "STRING",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 56,
+      "kind": "categorical",
+      "high_cardinality": true,
+      "note": "56 unique values across 33787 rows; too high-cardinality to list (likely an identifier/free-text column)"
+    },
+    "state_name": {
+      "data_type": "STRING",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 56,
+      "kind": "categorical",
+      "high_cardinality": true,
+      "note": "56 unique values across 33787 rows; too high-cardinality to list (likely an identifier/free-text column)"
+    },
+    "zcta": {
+      "data_type": "BOOLEAN",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 1,
+      "kind": "categorical",
+      "value_counts": {
+        "true": 33787
+      },
+      "high_cardinality": false
+    },
+    "parent_zcta": {
+      "data_type": "STRING",
+      "null_count": 33787,
+      "null_pct": 100.0,
+      "distinct_count": 0,
+      "kind": "categorical",
+      "value_counts": {},
+      "high_cardinality": false
+    },
+    "population": {
+      "data_type": "INT",
+      "null_count": 17,
+      "null_pct": 0.05,
+      "distinct_count": 15571,
+      "kind": "numerical",
+      "min": 0.0,
+      "max": 134008.0,
+      "mean": 9901.1701,
+      "median": 2656.0,
+      "stddev": 14908.642
+    },
+    "density": {
+      "data_type": "DOUBLE",
+      "null_count": 17,
+      "null_pct": 0.05,
+      "distinct_count": 9444,
+      "kind": "numerical",
+      "min": 0.0,
+      "max": 60879.2,
+      "mean": 510.0545,
+      "median": 30.6,
+      "stddev": 1944.7539
+    },
+    "county_fips": {
+      "data_type": "INT",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 3212,
+      "kind": "numerical",
+      "min": 1001.0,
+      "max": 78030.0,
+      "mean": 29989.6204,
+      "median": 30029.0,
+      "stddev": 15504.745
+    },
+    "county_name": {
+      "data_type": "STRING",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 1913,
+      "kind": "categorical",
+      "high_cardinality": true,
+      "note": "1913 unique values across 33787 rows; too high-cardinality to list (likely an identifier/free-text column)"
+    },
+    "county_weights": {
+      "data_type": "STRING",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 13395,
+      "kind": "categorical",
+      "high_cardinality": true,
+      "note": "13395 unique values across 33787 rows; too high-cardinality to list (likely an identifier/free-text column)"
+    },
+    "county_names_all": {
+      "data_type": "STRING",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 12214,
+      "kind": "categorical",
+      "high_cardinality": true,
+      "note": "12214 unique values across 33787 rows; too high-cardinality to list (likely an identifier/free-text column)"
+    },
+    "county_fips_all": {
+      "data_type": "STRING",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 11174,
+      "kind": "categorical",
+      "high_cardinality": true,
+      "note": "11174 unique values across 33787 rows; too high-cardinality to list (likely an identifier/free-text column)"
+    },
+    "imprecise": {
+      "data_type": "STRING",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 8290,
+      "kind": "categorical",
+      "high_cardinality": true,
+      "note": "8290 unique values across 33787 rows; too high-cardinality to list (likely an identifier/free-text column)"
+    },
+    "military": {
+      "data_type": "STRING",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 2527,
+      "kind": "categorical",
+      "high_cardinality": true,
+      "note": "2527 unique values across 33787 rows; too high-cardinality to list (likely an identifier/free-text column)"
+    },
+    "timezone": {
+      "data_type": "STRING",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 429,
+      "kind": "categorical",
+      "high_cardinality": true,
+      "note": "429 unique values across 33787 rows; too high-cardinality to list (likely an identifier/free-text column)"
+    }
+  }
+}
