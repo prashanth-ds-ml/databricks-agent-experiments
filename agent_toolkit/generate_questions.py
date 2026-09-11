@@ -25,9 +25,20 @@ def load_profiles(schema):
     return profiles
 
 
+NO_UNDERSCORE_ID_NAMES = {"id", "rowid", "uuid", "guid"}
+
+
 def looks_like_id(name: str) -> bool:
+    """True for column names that are clearly an identifier, not a metric.
+    Deliberately does NOT do a blanket `endswith("id")` -- that matches
+    "valid", "paid", "grid", "avoid", "solid", etc. Real id columns from
+    this project's own ingestion always end up underscore-separated
+    (sanitize_identifier turns "Row ID" into "row_id"), so `_id` is the
+    reliable signal; NO_UNDERSCORE_ID_NAMES covers the handful of common
+    id-like names that don't have one.
+    """
     n = name.lower()
-    return n == "id" or n.endswith("_id") or n.endswith("id")
+    return n in NO_UNDERSCORE_ID_NAMES or n.endswith("_id")
 
 
 def columns_by_kind(profile):

@@ -120,6 +120,23 @@ justified resolver stabilizer, fixed it. Both notebooks' install cells
 also keep a retry loop as a safety net and carry a comment explaining
 this so a future "obvious" fix doesn't get re-tried blind.
 
+## Tests
+
+- `tests/` covers the pure logic in every script here -- identifier
+  sanitization, file discovery/skip rules, the CSV encoding fallback,
+  chart/question selection, and SQL string building
+- No Databricks connection needed -- these are plain functions over
+  strings, dicts, and local files, run with fake/local inputs
+- Two real bugs were caught this way, not in production: `row_id` (and
+  other id columns) getting suggested as a "total X" metric, and a
+  blanket `endswith("id")` check that misclassified ordinary words like
+  "valid" and "paid" as identifier columns
+- Run them:
+  ```powershell
+  pip install pytest
+  pytest tests/ -v
+  ```
+
 ## Relationship to `databricks_agent/`
 
 - `databricks_agent/` (the original `sales_agent` build) stays as-is --

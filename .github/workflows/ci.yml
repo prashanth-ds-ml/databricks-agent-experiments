@@ -1,0 +1,36 @@
+name: CI
+
+# What this does and doesn't check:
+# - Every .py file in the repo parses (catches typos/syntax errors)
+# - agent_toolkit/tests/ actually runs and passes (pure logic: identifier
+#   sanitization, file discovery, chart/question selection, SQL building)
+# What it can't check, on purpose: nothing here talks to Databricks. A
+# public CI runner has no workspace credentials, so the actual
+# ingestion/profiling/dashboard/agent code paths are only verified by
+# hand, against a real workspace -- see each folder's README for how.
+
+on:
+  push:
+    branches: [master, main]
+  pull_request:
+    branches: [master, main]
+
+jobs:
+  syntax-and-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+
+      - name: Check every Python file parses
+        run: |
+          find . -name "*.py" -not -path "./.git/*" -print0 | xargs -0 -n1 python -m py_compile
+
+      - name: Install test dependencies
+        run: pip install pytest
+
+      - name: Run the pure-logic test suite
+        run: pytest agent_toolkit/tests/ -v

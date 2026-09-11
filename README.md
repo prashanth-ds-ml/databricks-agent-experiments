@@ -1,5 +1,10 @@
 # Databricks Agent Experiments
 
+[![CI](https://github.com/prashanth-ds-ml/databricks-agent-experiments/actions/workflows/ci.yml/badge.svg)](https://github.com/prashanth-ds-ml/databricks-agent-experiments/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+![Python](https://img.shields.io/badge/python-3.10%2B-blue)
+![Platform](https://img.shields.io/badge/platform-Databricks-red)
+
 Hands-on exploration of what it actually takes to put an AI agent in front
 of a data platform: not just calling an LLM, but giving it governed tools,
 trustworthy data underneath it, and a way to see what it's doing.
@@ -64,6 +69,10 @@ than picking one.
 
 ## Try it
 
+```powershell
+pip install -r requirements.txt   # only pymysql (MySQL loader) + pytest (tests) -- everything else is stdlib
+```
+
 You'll need the [Databricks CLI](https://docs.databricks.com/en/dev-tools/cli/index.html)
 authenticated against your own workspace (`databricks auth login`), and a
 SQL warehouse. Point the scripts at them without editing any code:
@@ -85,12 +94,22 @@ python setup.py --config configs/candy_distributor.json             # ingest -> 
 Then open `generic_agent_notebook.py` in Databricks, point its
 `catalog`/`schema` widgets at your data, and ask it questions.
 
+The pure logic (no Databricks needed) has its own test suite:
+
+```powershell
+pytest agent_toolkit/tests/ -v
+```
+
 ## Status
 
 Working end to end and verified by actually running it (not just reading
 the code): both agents answer real questions correctly, the generic
 pipeline has been proven on a second dataset, and the dashboard/profiler
-outputs have been spot-checked against the source data.
+outputs have been spot-checked against the source data. The pure logic
+(identifier sanitization, file discovery, chart/question selection) also
+has a real test suite (`agent_toolkit/tests/`, 50 tests) checked on every
+push by CI -- it can't touch Databricks itself from a public runner, but
+it did catch two real bugs during development.
 
 Open ends, if you want to pick one up: adding retrieval/RAG over
 documentation, an evaluation set for the agents' answers, wrapping either

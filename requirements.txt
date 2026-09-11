@@ -1,0 +1,10 @@
+# Almost everything in this repo is standard library only -- ingestion,
+# profiling, dashboard generation, and question generation talk to
+# Databricks via the CLI as a subprocess (see agent_toolkit/db_sql.py),
+# not a Python SDK, so there's very little to install.
+
+# Runtime: only needed for the local MySQL loader (sales/mysql/load_to_mysql.py)
+pymysql==1.2.0
+
+# Dev/test: only needed to run agent_toolkit/tests/
+pytest>=8.0
