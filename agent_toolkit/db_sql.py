@@ -1,22 +1,34 @@
 """Shared helper for running SQL against a Databricks warehouse via the
 Databricks CLI's `api` command (Statement Execution API), and for copying
 local files into a Unity Catalog volume. Used by every script in this
-toolkit. Requires the Databricks CLI and the `academy` profile configured
-in ~/.databrickscfg.
+toolkit.
+
+Requires the Databricks CLI (`databricks auth login` to set up a profile)
+and a SQL warehouse. Three things are environment-specific and can be
+overridden without editing this file:
+    DATABRICKS_CLI_PATH     path to the databricks executable
+                            (default: whatever "databricks" resolves to
+                            on PATH; falls back to the exact path this
+                            was developed with if PATH lookup fails)
+    DATABRICKS_CLI_PROFILE  ~/.databrickscfg profile name (default: DEFAULT)
+    DATABRICKS_WAREHOUSE_ID SQL warehouse to run statements against
+                            (default: the one this was developed with --
+                            you almost certainly want to override this)
 """
 
 import json
 import os
+import shutil
 import subprocess
 import tempfile
 import time
 
-DB_EXE = (
+DB_EXE = os.environ.get("DATABRICKS_CLI_PATH") or shutil.which("databricks") or (
     r"C:\Users\prash\AppData\Local\Microsoft\WinGet\Packages"
     r"\Databricks.DatabricksCLI_Microsoft.Winget.Source_8wekyb3d8bbwe\databricks.exe"
 )
-WAREHOUSE_ID = "461364b1c78f2539"
-PROFILE = "academy"
+WAREHOUSE_ID = os.environ.get("DATABRICKS_WAREHOUSE_ID", "461364b1c78f2539")
+PROFILE = os.environ.get("DATABRICKS_CLI_PROFILE", "DEFAULT")
 
 
 def _api(method, path, body=None):

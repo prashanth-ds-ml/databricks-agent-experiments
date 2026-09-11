@@ -14,9 +14,11 @@
 - `workspace.bas_sales` -- the original sales schema (6 tables, hand-built
   tools existed already)
 - `workspace.candy_distributor` -- ingested fresh from
-  `databricks_agents/US+Candy+Distributor/` as the generalization test: 4 tables,
-  10,194-row sales table, messy source headers (`Order ID`,
-  `Country/Region`) correctly sanitized to `order_id`, `country_region`
+  `databricks_agents/US+Candy+Distributor/` as the generalization test: 5
+  tables (including a 33,787-row zip-code reference table it picked up
+  automatically), a 10,194-row sales table, messy source headers
+  (`Order ID`, `Country/Region`) correctly sanitized to `order_id`,
+  `country_region`
 
 ## Usage: swap the dataset in 1 command
 
@@ -48,7 +50,7 @@ the top to `<your_schema>`, and run it -- no code edits needed.
   "catalog": "workspace",
   "schema": "candy_distributor",
   "source": "C:\\...\\US+Candy+Distributor",
-  "warehouse_id": "461364b1c78f2539"
+  "warehouse_id": "<your-sql-warehouse-id>"
 }
 ```
 
@@ -81,8 +83,6 @@ the top to `<your_schema>`, and run it -- no code edits needed.
 
 ## What's generic vs. what needs a human
 
-## What's generic vs. what needs a human
-
 | Piece | How generic |
 |---|---|
 | `ingest.py` | Fully generic -- any CSV folder, sanitizes messy column names automatically |
@@ -104,15 +104,21 @@ the top to `<your_schema>`, and run it -- no code edits needed.
 ## A debugging lesson worth keeping
 
 `generic_agent_notebook.py`'s `%pip install` cell intermittently failed
-with `pip._vendor.resolvelib.resolvers.ResolutionTooDeep: 200000` --
-pip's resolver thrashing through the fast-moving `databricks-langchain`/
-`mlflow` dependency tree (openai, mcp). The instinctive fix -- pin every
-package to an exact version, drop `-U` -- was tried and made it fail
-*more* often, not less, across two separate test runs. The formula that's
-actually been reliable (`-U` on the three heavy packages, exact pins only
-on the `langgraph` family) was reached by testing, not reasoning about it
-in the abstract; both notebooks' install cells now carry a comment
-explaining this so a future "obvious" fix doesn't get re-tried blind.
+with `pip._vendor.resolvelib.resolvers.ResolutionTooDeep: 200000` -- pip's
+resolver thrashing through the fast-moving `databricks-langchain`/`mlflow`
+dependency tree (openai, mcp). Two instinctive fixes were tried and made
+it *worse*, not better, across repeated test runs: pinning every package
+to an exact version, and splitting the install into two separate `pip`
+calls. Neither was the real variable.
+
+What actually mattered, found by testing every combination rather than
+reasoning about it in the abstract: every failing run had dropped
+`unitycatalog-ai[databricks]` from the install line (this notebook
+doesn't use it directly, so it seemed safe to omit) -- and every
+successful run had kept it. Adding it back, purely as an empirically
+justified resolver stabilizer, fixed it. Both notebooks' install cells
+also keep a retry loop as a safety net and carry a comment explaining
+this so a future "obvious" fix doesn't get re-tried blind.
 
 ## Relationship to `databricks_agent/`
 

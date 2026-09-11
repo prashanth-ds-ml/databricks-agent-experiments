@@ -15,9 +15,8 @@ import glob
 import json
 import os
 
-from db_sql import run_cli
+from db_sql import WAREHOUSE_ID, run_cli
 
-WAREHOUSE_ID = "461364b1c78f2539"
 MAX_TABLES = 6
 MAX_CATEGORICAL_PER_TABLE = 2
 

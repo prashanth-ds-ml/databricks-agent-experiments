@@ -53,7 +53,7 @@ flowchart LR
 
 | | `sales/databricks_agent/` | `agent_toolkit/` |
 |---|---|---|
-| Tools | 4 hand-written, named (`top_selling_products`, `low_stock_products`, ...) | 5 generic (`list_tables`, `run_readonly_sql`, `top_n_group_by`, ...) |
+| Tools | 5: 4 hand-written SQL functions (`top_selling_products`, `low_stock_products`, ...) + 1 Python tool for cached profile stats | 5 generic (`list_tables`, `run_readonly_sql`, `top_n_group_by`, ...) |
 | Works on a new dataset | No -- tools are written against specific column names | Yes -- proven on a second dataset, same code |
 | Answer quality | Higher -- each tool encodes real business logic | Lower -- the agent has to figure out which table/column fits a question itself |
 | Dashboard | Hand-designed charts | Auto-generated from whatever the data profile finds |
@@ -63,6 +63,15 @@ curation and portability, and seeing both side by side is more useful
 than picking one.
 
 ## Try it
+
+You'll need the [Databricks CLI](https://docs.databricks.com/en/dev-tools/cli/index.html)
+authenticated against your own workspace (`databricks auth login`), and a
+SQL warehouse. Point the scripts at them without editing any code:
+
+```powershell
+$env:DATABRICKS_CLI_PROFILE = "<your ~/.databrickscfg profile, or leave unset for DEFAULT>"
+$env:DATABRICKS_WAREHOUSE_ID = "<your SQL warehouse id>"
+```
 
 Both agents run as Databricks notebooks. The toolkit side is also
 runnable from a terminal:

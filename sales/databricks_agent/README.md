@@ -67,8 +67,9 @@ flowchart LR
 
 ### 2. Databricks CLI setup
 - Databricks CLI (`databricks.exe`, installed via winget) authenticated
-  against the workspace `dbc-181e284b-0bf0.cloud.databricks.com` using an
-  existing OAuth profile named `academy` in `~/.databrickscfg`.
+  against a Databricks workspace using an OAuth profile in
+  `~/.databrickscfg` (created with `databricks auth login`, referenced
+  here as the `academy` profile).
 - All subsequent steps run through this CLI (`databricks api`,
   `databricks fs`, `databricks workspace`, `databricks jobs`, etc.) rather
   than the web UI, so they're scripted and reproducible.
@@ -140,15 +141,15 @@ flowchart LR
 | What | Where |
 |---|---|
 | MySQL scripts | `mysql/schema.sql`, `mysql/load_to_mysql.py` |
-| Profiler | `build_profiles.py`, `db_sql.py`, output in `profiles/` (local) |
+| Profiler | `build_profiles.py`, `db_sql.py` -- writes a local `profiles/` folder when run (not committed here) and uploads the same output to the Databricks volume below |
 | Agent tools | `tools.sql` |
 | Agent notebook (local copy) | `agent_notebook.py` |
-| Agent notebook (Databricks) | `/Users/prashanth01071995@gmail.com/sales_agent/agent_notebook` |
+| Agent notebook (Databricks) | `/Users/<your-databricks-username>/sales_agent/agent_notebook` |
 | Delta tables | `workspace.bas_sales.{categories,suppliers,customers,products,orders,order_items}` |
 | Raw CSV volume | `workspace.bas_sales.raw_files` |
 | Profile cache volume | `workspace.bas_sales.profiles` |
 | Dashboard | "Sales Overview" (Lakeview), same workspace |
-| Warehouse used throughout | `461364b1c78f2539` ("Serverless Starter Warehouse") |
+| Warehouse used throughout | a serverless SQL warehouse (`WAREHOUSE_ID` in `db_sql.py`) |
 
 ## Decisions worth remembering
 
@@ -164,6 +165,14 @@ flowchart LR
   `ImportError: cannot import name 'ExecutionInfo' from 'langgraph.runtime'`
   (a real LangGraph packaging issue, not something specific to this
   project).
+- **The install cell retries on failure.** `databricks-langchain` and
+  `mlflow` pull in fast-moving dependency trees (openai, mcp), and pip
+  intermittently died with `ResolutionTooDeep: 200000` trying to resolve
+  them. Pinning tighter didn't fix it -- across repeated test runs (see
+  `agent_toolkit/`'s notebook and README for the full trail), the only
+  thing that reliably helped was keeping `unitycatalog-ai[databricks]` in
+  the same install command, plus a retry loop as a safety net. Treat a
+  pip resolver error here as transient, not a sign the command is wrong.
 - **Databricks `%md` cells do not render Mermaid natively** (that's a
   GitHub/Claude-Artifacts feature). The notebook instead renders diagrams
   via `displayHTML()` + Mermaid.js loaded from a CDN -- and the helper

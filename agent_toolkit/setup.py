@@ -12,7 +12,7 @@ Config file shape:
       "catalog": "workspace",
       "schema": "candy_distributor",
       "source": "C:\\...\\US+Candy+Distributor",
-      "warehouse_id": "461364b1c78f2539"   // optional, defaults to db_sql.WAREHOUSE_ID
+      "warehouse_id": "<your-sql-warehouse-id>"   // optional, defaults to db_sql.WAREHOUSE_ID
     }
 """
 
