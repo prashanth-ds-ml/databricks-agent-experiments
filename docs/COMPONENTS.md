@@ -85,7 +85,34 @@ in front of real data, and where to see it in this repo.
   the model call inherits the same governance and audit trail as
   everything else in the workspace
 - **Where:** `ChatDatabricks(endpoint="databricks-meta-llama-3-3-70b-instruct")`
-  in both agent notebooks
+  in both agent notebooks; also used for embedding models
+  (`databricks-gte-large-en`) in `knowledge_assistant/pdf_to_vector_index.py`
+
+## Vector Search
+
+- **What it is:** a governed, searchable index of embeddings (numeric
+  representations of text), built and kept in sync with a source Delta
+  table
+- **Why it matters for agents:** it's what lets an agent (or a no-code
+  Knowledge Assistant) answer questions from *unstructured* text --
+  PDFs, docs -- the same way UC functions let it answer questions from
+  structured tables
+- A **Delta Sync Index** stays wired to its source table and refreshes
+  with one `.sync()` call, instead of vectors being pushed/upserted by
+  hand on every data change
+- **Where:** `knowledge_assistant/pdf_to_vector_index.py` builds one from
+  a table of PDF text chunks
+
+## Agent Bricks / Knowledge Assistant
+
+- **What it is:** a no-code Databricks feature that turns a Vector Search
+  index into a question-answering chatbot -- point it at an index, no
+  retrieval or prompting code to write
+- **Why it matters:** the fastest path from "I have an index" to "I have
+  something to ask questions to" -- worth knowing about specifically so
+  you don't hand-build a RAG agent when this already does it
+- **Where:** the intended next step after `knowledge_assistant/pdf_to_vector_index.py`
+  builds the index -- see that notebook's "Next steps" cell
 
 ## AI Functions
 

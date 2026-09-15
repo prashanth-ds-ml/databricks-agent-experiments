@@ -52,6 +52,7 @@ flowchart LR
 |---|---|
 | [`sales/`](sales/) | The original dataset (6 CSVs) plus two parallel ingestion paths: a local MySQL copy, and a Databricks copy with a hand-built agent (see [`sales/databricks_agent/`](sales/databricks_agent/)) |
 | [`agent_toolkit/`](agent_toolkit/) | The generalized version -- point it at any folder of CSVs and it builds the tables, a data profile, a dashboard, a plain-English summary, and a tool-calling agent automatically. Proven on a second, unrelated dataset ([`US+Candy+Distributor/`](US+Candy+Distributor/)) with zero code changes |
+| [`knowledge_assistant/`](knowledge_assistant/) | Unstructured-data counterpart: turns an uploaded PDF into a Databricks Vector Search index, then answers questions from it with a LangGraph agent (a working alternative to Agent Bricks' Knowledge Assistant, which hit a platform bug in testing -- see that folder's README). Includes a beginner-friendly [tutorial](knowledge_assistant/TUTORIAL.md) for teaching the workflow to someone new |
 | [`docs/COMPONENTS.md`](docs/COMPONENTS.md) | What each Databricks piece used here actually is, in plain language, and why it matters when you're building agents on top of real data |
 
 ## The two builds, side by side
@@ -111,7 +112,16 @@ has a real test suite (`agent_toolkit/tests/`, 50 tests) checked on every
 push by CI -- it can't touch Databricks itself from a public runner, but
 it did catch two real bugs during development.
 
-Open ends, if you want to pick one up: adding retrieval/RAG over
-documentation, an evaluation set for the agents' answers, wrapping either
-agent for deployment as a callable endpoint, or trying a low-code
-alternative (Databricks Genie) as a comparison point.
+Retrieval/RAG over documentation is done: `knowledge_assistant/` builds a
+Vector Search index from an uploaded PDF and answers questions from it
+with a LangGraph agent, verified end to end with a real PDF and a real
+Databricks job run (see that folder's README for the full verification
+trail, including a platform-side Agent Bricks Knowledge Assistant bug
+found and worked around along the way).
+
+Other open ends, if you want to pick one up: an evaluation set for the
+agents' answers, wrapping any of the three agents for deployment as a
+callable endpoint, merging the knowledge assistant's retriever tool into
+the sales agent so one agent answers both structured and unstructured
+questions, or trying a low-code alternative (Databricks Genie) as a
+comparison point.
