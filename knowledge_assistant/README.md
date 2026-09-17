@@ -1,23 +1,44 @@
 # PDF Knowledge Assistant
 
-- Takes PDF(s) uploaded to a Unity Catalog volume and turns them into a
-  **Databricks Vector Search** index: chunked, embedded, governed, and
-  queryable -- the piece a Databricks **Knowledge Assistant** (Agent
-  Bricks) or a custom RAG tool sits on top of.
-- Two notebooks:
+- Takes PDF(s) uploaded to a Unity Catalog volume and makes them
+  question-answerable, via **two independent pipelines** with a real
+  cost trade-off -- see the comparison below.
+- **Billed pipeline** (governed, production-shaped):
   - [`pdf_to_vector_index.py`](pdf_to_vector_index.py) -- PDF -> chunks
-    -> Delta table -> Vector Search index. Designed to be re-run top to
-    bottom (`Run All`) any time; see its own intro cell for the full
-    smooth-start checklist and prerequisites.
+    -> Delta table -> **Databricks Vector Search** index.
   - [`pdf_qa_agent.py`](pdf_qa_agent.py) -- a LangGraph tool-calling
-    agent that answers questions from that index directly, without Agent
-    Bricks (see "Status" below for why).
+    agent answering from that index, using a Databricks-hosted LLM.
+- **Free pipeline** (no billed services beyond the cluster you already
+  need):
+  - [`free_pdf_to_embeddings.py`](free_pdf_to_embeddings.py) -- PDF ->
+    chunks -> Delta table with locally-computed embeddings, no Vector
+    Search endpoint.
+  - [`free_pdf_qa.py`](free_pdf_qa.py) -- plain numpy cosine-similarity
+    search plus a small local Hugging Face model for answers, no
+    Databricks-hosted LLM calls.
 - Plain-language, step-by-step version for teaching this to someone new:
   [`TUTORIAL.md`](TUTORIAL.md).
 - Structured/unstructured counterpart to [`sales/databricks_agent/`](../sales/databricks_agent/)
   and [`agent_toolkit/`](../agent_toolkit/) -- those put a tool-calling
   agent in front of Delta tables; this puts retrieval in front of
   documents.
+
+## The two pipelines, side by side
+
+| | Billed (`pdf_to_vector_index.py` + `pdf_qa_agent.py`) | Free (`free_pdf_to_embeddings.py` + `free_pdf_qa.py`) |
+|---|---|---|
+| Embeddings | Databricks-hosted (`databricks-gte-large-en`) or local HF | Local Hugging Face only (`all-MiniLM-L6-v2`) |
+| Search | Databricks Vector Search index (governed UC object, ANN search) | Plain numpy cosine similarity over a Delta table, driver-side |
+| Answer generation | Databricks-hosted LLM (`databricks-meta-llama-3-3-70b-instruct` by default) via a LangGraph tool-calling agent | Small local Hugging Face model (`Qwen2.5-*-Instruct`), fixed retrieve-then-generate pipeline |
+| What keeps costing money after the notebook finishes | The Vector Search endpoint, until deleted | Nothing -- only storage for the Delta table |
+| Scales to a large document library | Yes -- that's what Vector Search is for | No -- everything is loaded onto the driver |
+| Compatible with Agent Bricks Knowledge Assistant | Yes in principle (blocked by the platform bug below in practice) | No |
+| Answer quality | Higher -- a much larger model | Lower -- a small model, CPU-friendly by design |
+
+Neither is "better" -- same trade-off philosophy as the two sales agents
+in this repo: pick the free pipeline for learning/demoing without
+worrying about a running bill, the billed one when you actually need
+retrieval that scales or the best answer quality.
 
 ## Architecture
 
@@ -46,13 +67,16 @@ flowchart LR
 
 | What | Where |
 |---|---|
-| Indexing notebook | `pdf_to_vector_index.py` |
-| Q&A agent notebook | `pdf_qa_agent.py` |
+| Indexing notebook (billed) | `pdf_to_vector_index.py` |
+| Q&A agent notebook (billed) | `pdf_qa_agent.py` |
+| Embeddings notebook (free) | `free_pdf_to_embeddings.py` |
+| Q&A notebook (free) | `free_pdf_qa.py` |
 | Tutorial | `TUTORIAL.md` |
-| PDF volume | `<catalog>.<schema>.<pdf_volume>` (default: `workspace.knowledge_assistant.source_docs`) |
-| Chunks table | `<catalog>.<schema>.<chunks_table>` (default: `workspace.knowledge_assistant.doc_chunks`) |
-| Vector Search endpoint | name set by the `vs_endpoint` widget (default: `knowledge_assistant_vs`) |
-| Vector Search index | `<catalog>.<schema>.<vs_index_name>` (default: `workspace.knowledge_assistant.doc_chunks_index`) |
+| PDF volume | `<catalog>.<schema>.<pdf_volume>` (default: `workspace.knowledge_assistant.source_docs`, shared by both pipelines) |
+| Chunks table (billed) | `<catalog>.<schema>.<chunks_table>` (default: `workspace.knowledge_assistant.doc_chunks`) |
+| Chunks table (free) | `<catalog>.<schema>.<chunks_table>` (default: `workspace.knowledge_assistant.doc_chunks_free`) |
+| Vector Search endpoint (billed only) | name set by the `vs_endpoint` widget (default: `knowledge_assistant_vs`) |
+| Vector Search index (billed only) | `<catalog>.<schema>.<vs_index_name>` (default: `workspace.knowledge_assistant.doc_chunks_index`) |
 
 ## Decisions worth remembering
 
@@ -77,6 +101,18 @@ flowchart LR
   `embedding_source` widget after the index already exists requires
   deleting and recreating the index (`vsc.delete_index(...)`) -- there's
   no in-place "change embedding model" operation.
+- **The free pipeline isn't a LangGraph agent.** Small open-weight
+  models (the CPU-friendly sizes this notebook defaults to) are
+  unreliable at the structured tool-calling format LangGraph's ReAct
+  agent depends on. Since there's only ever one thing to do anyway
+  (retrieve, then answer from what was retrieved), a fixed pipeline is
+  both simpler and more robust than forcing an agentic loop onto a model
+  too small to use one reliably.
+- **The free pipeline's retrieval doesn't scale past the driver's
+  memory** -- `toPandas()` pulls every chunk onto one machine to score
+  with numpy. Fine for a PDF or two; a real document library needs an
+  actual index (Vector Search, or a local library like FAISS), which is
+  exactly the cost/capability trade the billed pipeline makes.
 - **The PDF upload step is manual, on purpose.** Everything else in this
   notebook is scripted/idempotent, but there's no way to script "which
   PDF do you want indexed" -- Catalog Explorer's upload UI is the
@@ -106,16 +142,26 @@ the code:
   index as a tool, using `databricks-meta-llama-3-3-70b-instruct`) was
   built as a working alternative and **submitted as a real Databricks
   job run** -- completed with `result_state: SUCCESS`, no errors, in
-  ~103 seconds including a cold cluster start. This is the currently
-  recommended path until the Agent Bricks issue is resolved.
+  ~103 seconds including a cold cluster start.
+- **Added a fully free pipeline** (`free_pdf_to_embeddings.py` +
+  `free_pdf_qa.py`) after deciding the ongoing Vector Search endpoint
+  cost wasn't worth it for a learning/demo project: local Hugging Face
+  embeddings, plain numpy cosine similarity, and a small local Hugging
+  Face chat model -- no Vector Search endpoint, no pay-per-token model
+  calls. Not yet run end to end against a real PDF (that's the next
+  verification step for this pair, same as the billed pair got before
+  being called done).
 
 ## Next steps
 
+- Run the free pipeline end to end against a real PDF and confirm it,
+  the way the billed pipeline already was.
 - If Databricks resolves the `instructed-retriever-1` issue, try the
   Knowledge Assistant path again -- no changes needed to the index itself.
-- Add `pdf_qa_agent.py`'s retriever tool to `sales/databricks_agent/agent_notebook.py`
+- Merge either agent's retriever tool into `sales/databricks_agent/agent_notebook.py`
   (or a new combined notebook) so one agent can answer both structured
   (SQL) and unstructured (PDF) questions.
-- If this grows beyond a couple of PDFs, revisit driver-side Hugging Face
-  embedding (see "Decisions" above) and `pipeline_type` for a
-  continuously-synced index.
+- If either pipeline grows beyond a couple of PDFs, the free one needs a
+  real index instead of driver-side numpy (see "Decisions" above), and
+  the billed one might want `pipeline_type="CONTINUOUS"` instead of
+  `TRIGGERED` for a continuously-synced index.

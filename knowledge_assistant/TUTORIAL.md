@@ -9,6 +9,17 @@ see [`README.md`](README.md) in this folder.
 stored in Databricks, that you (or a no-code "Knowledge Assistant") can
 ask questions against.
 
+**Want zero ongoing cost instead?** This tutorial walks through the
+"billed" pair of notebooks (`pdf_to_vector_index.py` + `pdf_qa_agent.py`),
+which uses a Databricks Vector Search endpoint that bills continuously
+until you delete it, plus pay-per-token model calls. There's also a
+**free** pair -- [`free_pdf_to_embeddings.py`](free_pdf_to_embeddings.py)
+and [`free_pdf_qa.py`](free_pdf_qa.py) -- that does the same job with a
+local Hugging Face model for embeddings and answers instead, and no
+Vector Search endpoint at all. Same widgets-then-Run-All shape as
+everything below, just swap which pair of notebooks you open. See the
+comparison table in [`README.md`](README.md) for the trade-offs.
+
 ## Databricks concepts used here, in plain English
 
 You don't need to know Databricks to follow this -- here's everything
@@ -223,6 +234,8 @@ this:
 
 ## Don't forget to clean up
 
-A Vector Search endpoint keeps costing money until you delete it, even if
-you're done experimenting. In a new cell: `vsc.delete_endpoint("<your
-endpoint name>")`.
+If you followed this (billed) tutorial, a Vector Search endpoint keeps
+costing money until you delete it, even if you're done experimenting. In
+a new cell: `vsc.delete_endpoint("<your endpoint name>")`. The free
+pipeline (`free_pdf_to_embeddings.py` / `free_pdf_qa.py`) has nothing
+equivalent to clean up -- it only leaves behind a Delta table.

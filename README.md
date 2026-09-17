@@ -52,7 +52,7 @@ flowchart LR
 |---|---|
 | [`sales/`](sales/) | The original dataset (6 CSVs) plus two parallel ingestion paths: a local MySQL copy, and a Databricks copy with a hand-built agent (see [`sales/databricks_agent/`](sales/databricks_agent/)) |
 | [`agent_toolkit/`](agent_toolkit/) | The generalized version -- point it at any folder of CSVs and it builds the tables, a data profile, a dashboard, a plain-English summary, and a tool-calling agent automatically. Proven on a second, unrelated dataset ([`US+Candy+Distributor/`](US+Candy+Distributor/)) with zero code changes |
-| [`knowledge_assistant/`](knowledge_assistant/) | Unstructured-data counterpart: turns an uploaded PDF into a Databricks Vector Search index, then answers questions from it with a LangGraph agent (a working alternative to Agent Bricks' Knowledge Assistant, which hit a platform bug in testing -- see that folder's README). Includes a beginner-friendly [tutorial](knowledge_assistant/TUTORIAL.md) for teaching the workflow to someone new |
+| [`knowledge_assistant/`](knowledge_assistant/) | Unstructured-data counterpart: turns an uploaded PDF into something question-answerable, two ways -- a billed pipeline (Vector Search + a Databricks-hosted LLM, with a LangGraph agent standing in for Agent Bricks' Knowledge Assistant, which hit a platform bug in testing) and a free pipeline (local Hugging Face embeddings + a small local chat model, no billed services). Includes a beginner-friendly [tutorial](knowledge_assistant/TUTORIAL.md) for teaching the workflow to someone new |
 | [`docs/COMPONENTS.md`](docs/COMPONENTS.md) | What each Databricks piece used here actually is, in plain language, and why it matters when you're building agents on top of real data |
 
 ## The two builds, side by side
