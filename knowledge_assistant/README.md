@@ -16,6 +16,14 @@
   - [`free_pdf_qa.py`](free_pdf_qa.py) -- plain numpy cosine-similarity
     search plus a small local Hugging Face model for answers, no
     Databricks-hosted LLM calls.
+- **Want to explain *how* it works, not just use it?**
+  [`rag_concepts_demo.py`](rag_concepts_demo.py) is a presentation
+  notebook (not a pipeline) -- run it live to walk someone through
+  chunking, an interactive plot of the embedding space (similar chunks
+  visibly cluster; a real question shows up as a point connected to the
+  chunks it retrieves), retrieval metadata, a full question-to-answer
+  run, and a concrete list of levers to improve accuracy further. Built
+  on the free pipeline's data, zero billed services.
 - Plain-language, step-by-step version for teaching this to someone new:
   [`TUTORIAL.md`](TUTORIAL.md).
 - Structured/unstructured counterpart to [`sales/databricks_agent/`](../sales/databricks_agent/)
@@ -71,6 +79,7 @@ flowchart LR
 | Q&A agent notebook (billed) | `pdf_qa_agent.py` |
 | Embeddings notebook (free) | `free_pdf_to_embeddings.py` |
 | Q&A notebook (free) | `free_pdf_qa.py` |
+| Presentation notebook | `rag_concepts_demo.py` |
 | Tutorial | `TUTORIAL.md` |
 | PDF volume | `<catalog>.<schema>.<pdf_volume>` (default: `workspace.knowledge_assistant.source_docs`, shared by both pipelines) |
 | Chunks table (billed) | `<catalog>.<schema>.<chunks_table>` (default: `workspace.knowledge_assistant.doc_chunks`) |
@@ -163,6 +172,14 @@ the code:
   is the recommended way to ask questions of the PDF until/unless there's
   a specific reason to need Vector Search or the no-code Knowledge
   Assistant experience again.
+
+- **`rag_concepts_demo.py`** (a presentation notebook, not a pipeline)
+  was built for explaining/teaching the free pipeline rather than running
+  it -- chunking demo, an interactive Plotly embedding-space plot
+  (PCA + KMeans, hoverable, with a live query plotted against real
+  retrieved chunks), retrieval + metadata, a full Q&A run, and an
+  improvement-levers table. **Submitted as a real job run** --
+  `result_state: SUCCESS`.
 
 ## Next steps
 

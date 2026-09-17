@@ -185,6 +185,18 @@ just by keyword.
 4. Databricks builds the question-answering chatbot on top of it
    automatically -- no further setup from this notebook needed.
 
+## Presenting this to someone else
+
+If you want to *explain* how this works rather than just use it -- for a
+mentor, a class, a demo -- open [`rag_concepts_demo.py`](rag_concepts_demo.py)
+instead of the notebooks above. It's built to run live in front of an
+audience: it shows a real page of your PDF getting chunked, an
+interactive plot where you can literally see similar chunks cluster
+together and watch where a question lands relative to them, the
+retrieved chunks with their metadata explained, a full question-to-answer
+run, and a table of concrete ways to make it more accurate. Same
+prerequisite as `free_pdf_qa.py`: run `free_pdf_to_embeddings.py` first.
+
 ## If Agent Bricks doesn't work
 
 Databricks' Knowledge Assistant is a fairly new ("Beta") feature, and it
