@@ -390,3 +390,78 @@ print(f"A: {answer}")
 # MAGIC | **Query rewriting** | Expand a short/ambiguous question into a fuller one (or generate a few phrasings) before embedding it, to retrieve better when the user's wording doesn't match the document's | Medium |
 # MAGIC | **An evaluation set** | A fixed list of real questions with known-correct answers, scored automatically (retrieval recall@k, answer faithfulness) -- turns "feels better" into a number you can track across changes | Medium-High |
 # MAGIC | **A feedback loop** | Let users mark an answer as wrong/unhelpful, and use that signal over time to spot systematic weak spots (a chunking issue, a missing document, a bad retrieval) | Higher |
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC # Part 6: Try Your Own Questions
+# MAGIC Everything above ran once, on one fixed sample question. This wraps
+# MAGIC the same steps -- embed the question, find the nearest chunks,
+# MAGIC re-plot them, generate an answer -- into one function, so you can
+# MAGIC ask anything about the PDF live and show the whole chain again for
+# MAGIC a new question, without re-running any of the setup above.
+
+# COMMAND ----------
+
+
+def demo_question(question: str, k: int = TOP_K, show_plot: bool = True):
+    idx, scores, query_vector = retrieve(question, k)
+
+    if show_plot:
+        query_2d = pca.transform(query_vector.reshape(1, -1))[0]
+        fig = go.Figure()
+        fig.add_trace(go.Scatter(
+            x=coords_2d[:, 0], y=coords_2d[:, 1],
+            mode="markers",
+            marker=dict(size=9, color=cluster_labels, colorscale="Viridis", line=dict(width=0.5, color="white")),
+            text=hover_text, hoverinfo="text", name="Chunks",
+        ))
+        for i in idx:
+            fig.add_trace(go.Scatter(
+                x=[query_2d[0], coords_2d[i, 0]], y=[query_2d[1], coords_2d[i, 1]],
+                mode="lines", line=dict(color="crimson", width=1, dash="dot"),
+                hoverinfo="skip", showlegend=False,
+            ))
+        fig.add_trace(go.Scatter(
+            x=[query_2d[0]], y=[query_2d[1]],
+            mode="markers+text",
+            marker=dict(size=20, color="crimson", symbol="star", line=dict(width=1, color="white")),
+            text=["Your question"], textposition="top center",
+            hoverinfo="text", hovertext=[question], name="Query",
+        ))
+        fig.update_layout(
+            title=f"Where {question!r} lands, and the {k} chunks it retrieved",
+            showlegend=False, height=600,
+            xaxis_title="PCA dimension 1", yaxis_title="PCA dimension 2",
+        )
+        fig.show()
+
+    hits = chunks_pdf.iloc[idx].copy()
+    hits["score"] = scores
+    hits["preview"] = hits["content"].str.slice(0, 160) + "..."
+    display(hits[["score", "source_file", "page_number", "preview"]])
+
+    context = "\n\n".join(
+        f"[{row.source_file}, page {int(row.page_number)}]\n{row.content}"
+        for row in hits.itertuples()
+    )
+    messages = [
+        {"role": "system", "content": SYSTEM_PROMPT},
+        {"role": "user", "content": f"Context:\n{context}\n\nQuestion: {question}"},
+    ]
+    answer = generator(messages, max_new_tokens=300, do_sample=False)[0]["generated_text"][-1]["content"]
+    print(f"\nQ: {question}\nA: {answer}")
+
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC Type any question about your PDF into the cell below and run it --
+# MAGIC re-run with a new question as many times as you like during a live
+# MAGIC demo. Each run shows: where the question lands in the embedding
+# MAGIC plot, which chunks it retrieved with their metadata, and the
+# MAGIC model's answer.
+
+# COMMAND ----------
+
+demo_question("Type your own question about the PDF here")

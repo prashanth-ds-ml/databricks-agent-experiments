@@ -184,49 +184,74 @@ fig.show()
 # MAGIC %md
 # MAGIC # Part 4: Using it to answer a question
 # MAGIC This is the exact move retrieval makes: embed a question the same
-# MAGIC way, then find whichever sentences land closest to it. Try changing
-# MAGIC the `your_own_sentence` widget above and re-running this cell.
+# MAGIC way, then find whichever sentences land closest to it. Wrapped into
+# MAGIC a function below so you can type any sentence you like and see the
+# MAGIC graph update on the spot -- no need to touch the widget above or
+# MAGIC re-run anything before this point.
 
 # COMMAND ----------
 
-query_vector = embed_model.encode(YOUR_SENTENCE)
-query_unit = query_vector / np.linalg.norm(query_vector)
-scores = unit_vectors @ query_unit
-ranked = np.argsort(-scores)
 
-print(f"Query: {YOUR_SENTENCE!r}\n")
-print("Most similar sentences, best match first:")
-for i in ranked[:3]:
-    print(f"  {scores[i]:.3f}  [{topics[i]}]  {texts[i]}")
+def try_sentence(sentence: str, k: int = 3, show_plot: bool = True):
+    query_vector = embed_model.encode(sentence)
+    query_unit = query_vector / np.linalg.norm(query_vector)
+    scores = unit_vectors @ query_unit
+    ranked = np.argsort(-scores)[:k]
+
+    print(f"Your sentence: {sentence!r}\n")
+    print("Most similar example sentences, best match first:")
+    for i in ranked:
+        print(f"  {scores[i]:.3f}  [{topics[i]}]  {texts[i]}")
+
+    if not show_plot:
+        return
+
+    query_2d = pca.transform(query_vector.reshape(1, -1))[0]
+
+    fig = go.Figure()
+    for topic in sorted(set(topics)):
+        idx = [i for i, t in enumerate(topics) if t == topic]
+        fig.add_trace(go.Scatter(
+            x=coords_2d[idx, 0], y=coords_2d[idx, 1],
+            mode="markers", marker=dict(size=12),
+            text=[texts[i] for i in idx], hoverinfo="text", name=topic,
+        ))
+
+    for i in ranked:
+        fig.add_trace(go.Scatter(
+            x=[query_2d[0], coords_2d[i, 0]], y=[query_2d[1], coords_2d[i, 1]],
+            mode="lines", line=dict(color="crimson", width=1, dash="dot"),
+            hoverinfo="skip", showlegend=False,
+        ))
+
+    fig.add_trace(go.Scatter(
+        x=[query_2d[0]], y=[query_2d[1]],
+        mode="markers+text", marker=dict(size=20, color="crimson", symbol="star", line=dict(width=1, color="white")),
+        text=["Your sentence"], textposition="top center", hoverinfo="text", hovertext=[sentence],
+        name="Your sentence",
+    ))
+    fig.update_layout(title=f"Where {sentence!r} lands among the twelve example sentences", height=600, legend_title_text="Topic")
+    fig.show()
+
 
 # COMMAND ----------
 
-query_2d = pca.transform(query_vector.reshape(1, -1))[0]
+# MAGIC %md Try the widget's sentence first:
 
-fig = go.Figure()
-for topic in sorted(set(topics)):
-    idx = [i for i, t in enumerate(topics) if t == topic]
-    fig.add_trace(go.Scatter(
-        x=coords_2d[idx, 0], y=coords_2d[idx, 1],
-        mode="markers", marker=dict(size=12),
-        text=[texts[i] for i in idx], hoverinfo="text", name=topic,
-    ))
+# COMMAND ----------
 
-for i in ranked[:3]:
-    fig.add_trace(go.Scatter(
-        x=[query_2d[0], coords_2d[i, 0]], y=[query_2d[1], coords_2d[i, 1]],
-        mode="lines", line=dict(color="crimson", width=1, dash="dot"),
-        hoverinfo="skip", showlegend=False,
-    ))
+try_sentence(YOUR_SENTENCE)
 
-fig.add_trace(go.Scatter(
-    x=[query_2d[0]], y=[query_2d[1]],
-    mode="markers+text", marker=dict(size=20, color="crimson", symbol="star", line=dict(width=1, color="white")),
-    text=["Your question"], textposition="top center", hoverinfo="text", hovertext=[YOUR_SENTENCE],
-    name="Query",
-))
-fig.update_layout(title="Your question, plotted against the same twelve sentences", height=600, legend_title_text="Topic")
-fig.show()
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC ## Now type your own -- edit the sentence below and re-run this
+# MAGIC cell as many times as you like. Watch the star move to wherever
+# MAGIC your new sentence's meaning actually is, live.
+
+# COMMAND ----------
+
+try_sentence("A player kicked the ball into the goal.")
 
 # COMMAND ----------
 
