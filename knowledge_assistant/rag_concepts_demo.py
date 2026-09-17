@@ -21,9 +21,18 @@
 # MAGIC embeddings, local small chat model, a couple of open-source Python
 # MAGIC libraries for the plots.
 # MAGIC
-# MAGIC **Before you run this:** run `free_pdf_to_embeddings.py` at least
-# MAGIC once so the chunks table exists. Cluster: Databricks Runtime 14.3
-# MAGIC LTS+, no GPU required.
+# MAGIC **New to embeddings, or presenting to someone who is?** Run
+# MAGIC [`embeddings_explained.py`](embeddings_explained.py) first -- a
+# MAGIC 5-minute primer on the same techniques using simple example
+# MAGIC sentences, so the plot below reads as a confirmation of something
+# MAGIC already understood, not a new idea to take on faith.
+# MAGIC
+# MAGIC **Before you run this:** run `free_pdf_to_embeddings.py` **once**
+# MAGIC so the chunks table exists -- not every time. Once that table's
+# MAGIC there, re-running this notebook reuses it directly; you only need
+# MAGIC to re-run `free_pdf_to_embeddings.py` again if you upload a new/
+# MAGIC different PDF. Cluster: Databricks Runtime 14.3 LTS+, no GPU
+# MAGIC required.
 
 # COMMAND ----------
 

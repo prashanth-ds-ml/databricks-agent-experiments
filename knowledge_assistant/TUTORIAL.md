@@ -188,14 +188,31 @@ just by keyword.
 ## Presenting this to someone else
 
 If you want to *explain* how this works rather than just use it -- for a
-mentor, a class, a demo -- open [`rag_concepts_demo.py`](rag_concepts_demo.py)
-instead of the notebooks above. It's built to run live in front of an
-audience: it shows a real page of your PDF getting chunked, an
-interactive plot where you can literally see similar chunks cluster
-together and watch where a question lands relative to them, the
-retrieved chunks with their metadata explained, a full question-to-answer
-run, and a table of concrete ways to make it more accurate. Same
-prerequisite as `free_pdf_qa.py`: run `free_pdf_to_embeddings.py` first.
+mentor, a class, a demo -- there are two presentation notebooks, meant to
+be run in this order:
+
+1. [`embeddings_explained.py`](embeddings_explained.py) -- a 5-minute
+   warm-up using a dozen simple, hand-written sentences ("the dog is
+   playing in the park", "share prices dropped this morning", ...)
+   instead of PDF text. Shows what an embedding actually is, why similar
+   *meaning* scores similarly even when the words are completely
+   different, and a toy version of "plot a question against known
+   sentences and see which one it's closest to." No prerequisites beyond
+   the notebook itself.
+2. [`rag_concepts_demo.py`](rag_concepts_demo.py) -- the exact same
+   techniques and the same style of plot, now on your real PDF: a page
+   getting chunked live, an interactive plot where you can see similar
+   chunks cluster together and watch where a real question lands
+   relative to them, the retrieved chunks with their metadata explained,
+   a full question-to-answer run, and a table of concrete ways to make
+   it more accurate. Same prerequisite as `free_pdf_qa.py`: run
+   `free_pdf_to_embeddings.py` once beforehand (not every time -- once
+   the chunks table exists, `rag_concepts_demo.py` reuses it directly).
+
+Running the primer first means the audience has already seen "similar
+meaning -> nearby points" on something obvious, so the PDF version lands
+as confirmation of a pattern they already trust, not a new idea to take
+on faith.
 
 ## If Agent Bricks doesn't work
 

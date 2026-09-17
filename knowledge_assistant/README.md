@@ -16,14 +16,22 @@
   - [`free_pdf_qa.py`](free_pdf_qa.py) -- plain numpy cosine-similarity
     search plus a small local Hugging Face model for answers, no
     Databricks-hosted LLM calls.
-- **Want to explain *how* it works, not just use it?**
-  [`rag_concepts_demo.py`](rag_concepts_demo.py) is a presentation
-  notebook (not a pipeline) -- run it live to walk someone through
-  chunking, an interactive plot of the embedding space (similar chunks
-  visibly cluster; a real question shows up as a point connected to the
-  chunks it retrieves), retrieval metadata, a full question-to-answer
-  run, and a concrete list of levers to improve accuracy further. Built
-  on the free pipeline's data, zero billed services.
+- **Want to explain *how* it works, not just use it?** Two presentation
+  notebooks (not pipelines -- built for talking someone through this
+  live, in order):
+  - [`embeddings_explained.py`](embeddings_explained.py) -- a 5-minute
+    primer using a dozen simple, plainly-different example sentences
+    (not PDF text): what an embedding actually is, why similar meaning
+    scores similarly even with zero shared words, and a toy version of
+    "plot a question against known sentences and see which it's closest
+    to." Run this first for an audience new to embeddings.
+  - [`rag_concepts_demo.py`](rag_concepts_demo.py) -- the same techniques
+    and the same style of plot, now on your real PDF: chunking, an
+    interactive plot of the embedding space (similar chunks visibly
+    cluster; a real question shows up as a point connected to the chunks
+    it retrieves), retrieval metadata, a full question-to-answer run, and
+    a concrete list of levers to improve accuracy further.
+  Both built on free, local models -- zero billed services.
 - Plain-language, step-by-step version for teaching this to someone new:
   [`TUTORIAL.md`](TUTORIAL.md).
 - Structured/unstructured counterpart to [`sales/databricks_agent/`](../sales/databricks_agent/)
@@ -79,7 +87,8 @@ flowchart LR
 | Q&A agent notebook (billed) | `pdf_qa_agent.py` |
 | Embeddings notebook (free) | `free_pdf_to_embeddings.py` |
 | Q&A notebook (free) | `free_pdf_qa.py` |
-| Presentation notebook | `rag_concepts_demo.py` |
+| Presentation notebook (embeddings primer) | `embeddings_explained.py` |
+| Presentation notebook (full RAG demo) | `rag_concepts_demo.py` |
 | Tutorial | `TUTORIAL.md` |
 | PDF volume | `<catalog>.<schema>.<pdf_volume>` (default: `workspace.knowledge_assistant.source_docs`, shared by both pipelines) |
 | Chunks table (billed) | `<catalog>.<schema>.<chunks_table>` (default: `workspace.knowledge_assistant.doc_chunks`) |
@@ -180,6 +189,12 @@ the code:
   retrieved chunks), retrieval + metadata, a full Q&A run, and an
   improvement-levers table. **Submitted as a real job run** --
   `result_state: SUCCESS`.
+- **`embeddings_explained.py`** added as a prerequisite primer -- same
+  techniques (embed, cosine similarity, PCA plot, plot a query against
+  known points) on a dozen simple, hand-written sentences with known
+  topics, so the pattern is unmistakable before seeing it applied to
+  real (messier) PDF chunks in `rag_concepts_demo.py`. **Submitted as a
+  real job run** -- `result_state: SUCCESS` (~140 seconds).
 
 ## Next steps
 
