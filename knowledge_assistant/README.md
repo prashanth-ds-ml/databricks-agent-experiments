@@ -148,16 +148,28 @@ the code:
   cost wasn't worth it for a learning/demo project: local Hugging Face
   embeddings, plain numpy cosine similarity, and a small local Hugging
   Face chat model -- no Vector Search endpoint, no pay-per-token model
-  calls. Not yet run end to end against a real PDF (that's the next
-  verification step for this pair, same as the billed pair got before
-  being called done).
+  calls. **Submitted as a real two-task Databricks job run**
+  (`free_pdf_to_embeddings` -> `free_pdf_qa`, chained via `depends_on`)
+  against the same PDF used to verify the billed pipeline -- both tasks
+  `SUCCESS`.
+- **Both Vector Search endpoints deleted** (`knowledge_assistant_vs` and
+  `ka-5918c3d8-vs-endpoint`, the latter auto-created by Agent Bricks
+  itself while testing the Knowledge Assistant) -- confirmed via
+  `vector-search-endpoints list-endpoints` returning empty. Nothing in
+  this project bills anything, currently.
+- **Decided against retrying Agent Bricks Knowledge Assistant for now.**
+  It would mean recreating the billed endpoint just to very likely hit
+  the same platform-side `instructed-retriever-1` bug again. `free_pdf_qa.py`
+  is the recommended way to ask questions of the PDF until/unless there's
+  a specific reason to need Vector Search or the no-code Knowledge
+  Assistant experience again.
 
 ## Next steps
 
-- Run the free pipeline end to end against a real PDF and confirm it,
-  the way the billed pipeline already was.
-- If Databricks resolves the `instructed-retriever-1` issue, try the
-  Knowledge Assistant path again -- no changes needed to the index itself.
+- If Databricks resolves the `instructed-retriever-1` issue and Agent
+  Bricks is worth revisiting, re-run `pdf_to_vector_index.py` to recreate
+  the index/endpoint first (they were deleted) before pointing a
+  Knowledge Assistant at it again.
 - Merge either agent's retriever tool into `sales/databricks_agent/agent_notebook.py`
   (or a new combined notebook) so one agent can answer both structured
   (SQL) and unstructured (PDF) questions.
